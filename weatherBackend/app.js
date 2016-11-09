@@ -4,9 +4,11 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+require('body-parser-xml')(bodyParser);
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var forecastUpdate = require('./routes/forecastUpdate');
 
 var app = express();
 
@@ -18,12 +20,24 @@ app.set('view engine', 'jade');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
+app.use(bodyParser.xml({
+  limit: '1MB',   // Reject payload bigger than 1 MB
+  xmlParseOptions: {
+    normalize: true,     // Trim whitespace inside text nodes
+    // normalizeTags: true, // Transform tags to lowercase
+    explicitArray: false // Only put nodes in array if >1
+  }
+}));
+
 app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/forecastUpdate', forecastUpdate);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
