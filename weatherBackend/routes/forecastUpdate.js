@@ -1,6 +1,6 @@
-        var dboper = require('../dbOperations');
+        var dboper = require('../scripts/dbOperations');
         var assert = require('assert');
-        var connectDB = require('../mongoConnect');
+        var connectDB = require('../javascripts/mongoConnect');
 
         var express = require('express');
         var router = express.Router();
@@ -80,7 +80,7 @@
                         "forecasts", function (result) {
                             console.log(result.ops);
 
-                            // dboper.findDocuments(db, "dishes", function (docs) {
+                            // dboper.findDocumentsByQuerry(db, "dishes", function (docs) {
                                 // console.log(docs);
 
                                 db.close();
