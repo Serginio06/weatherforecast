@@ -5,59 +5,59 @@
         var express = require('express');
         var router = express.Router();
 
-        var transformXMLtoLocalJSON = function (reqBody) {
-            var localForecast;
-            var dailyForecast = [];
-
-            for (var n = 0; n < reqBody.weatherdata.forecast.tabular.time.length; n++) {
-
-                dailyForecast.push({
-                    timeFrom: reqBody.weatherdata.forecast.tabular.time[n].$.from,
-                    timeTo: reqBody.weatherdata.forecast.tabular.time[n].$.to,
-                    timePeriod: reqBody.weatherdata.forecast.tabular.time[n].$.period,
-                    symbolName: reqBody.weatherdata.forecast.tabular.time[n].symbol.$.name,
-                    symbolnumberEx: reqBody.weatherdata.forecast.tabular.time[n].symbol.$.numberEx,
-                    precipitationValue: reqBody.weatherdata.forecast.tabular.time[n].precipitation.$.value,
-                    windDirectionCode: reqBody.weatherdata.forecast.tabular.time[n].windDirection.$.code,
-                    windSpeedName: reqBody.weatherdata.forecast.tabular.time[n].windSpeed.$.name,
-                    windSpeedMPS: reqBody.weatherdata.forecast.tabular.time[n].windSpeed.$.mps,
-                    temperatureUnit: reqBody.weatherdata.forecast.tabular.time[n].temperature.$.unit,
-                    temperatureValue: reqBody.weatherdata.forecast.tabular.time[n].temperature.$.value,
-                    pressureUnit: reqBody.weatherdata.forecast.tabular.time[n].pressure.$.unit,
-                    pressureValue: reqBody.weatherdata.forecast.tabular.time[n].pressure.$.value
-                }
-            );
-
-            }
-
-            localForecast = {
-                location: {
-                    Geobaseid: reqBody.weatherdata.location.location.$.geobaseid,
-                    name: reqBody.weatherdata.location.name,
-                    type: reqBody.weatherdata.location.type,
-                    country: reqBody.weatherdata.location.country,
-                    timezoneUtcoffsetMinutes: reqBody.weatherdata.location.timezone.$.utcoffsetMinutes
-                },
-                credit: {
-                    link_text: reqBody.weatherdata.credit.link.$.text,
-                    link_url: reqBody.weatherdata.credit.link.$.url
-                },
-                meta: {
-                    lastupdate: reqBody.weatherdata.meta.lastupdate,
-                    nextupdate: reqBody.weatherdata.meta.nextupdate
-                },
-                sun: {
-                    rise: reqBody.weatherdata.sun.$.rise,
-                    set: reqBody.weatherdata.sun.$.set
-                },
-                forecast:dailyForecast
-
-
-            };
-
-            return localForecast;
-
-        };
+        // var transformXMLtoLocalJSON = function (reqBody) {
+        //     var localForecast;
+        //     var dailyForecast = [];
+        //
+        //     for (var n = 0; n < reqBody.weatherdata.forecast.tabular.time.length; n++) {
+        //
+        //         dailyForecast.push({
+        //             timeFrom: reqBody.weatherdata.forecast.tabular.time[n].$.from,
+        //             timeTo: reqBody.weatherdata.forecast.tabular.time[n].$.to,
+        //             timePeriod: reqBody.weatherdata.forecast.tabular.time[n].$.period,
+        //             symbolName: reqBody.weatherdata.forecast.tabular.time[n].symbol.$.name,
+        //             symbolnumberEx: reqBody.weatherdata.forecast.tabular.time[n].symbol.$.numberEx,
+        //             precipitationValue: reqBody.weatherdata.forecast.tabular.time[n].precipitation.$.value,
+        //             windDirectionCode: reqBody.weatherdata.forecast.tabular.time[n].windDirection.$.code,
+        //             windSpeedName: reqBody.weatherdata.forecast.tabular.time[n].windSpeed.$.name,
+        //             windSpeedMPS: reqBody.weatherdata.forecast.tabular.time[n].windSpeed.$.mps,
+        //             temperatureUnit: reqBody.weatherdata.forecast.tabular.time[n].temperature.$.unit,
+        //             temperatureValue: reqBody.weatherdata.forecast.tabular.time[n].temperature.$.value,
+        //             pressureUnit: reqBody.weatherdata.forecast.tabular.time[n].pressure.$.unit,
+        //             pressureValue: reqBody.weatherdata.forecast.tabular.time[n].pressure.$.value
+        //         }
+        //     );
+        //
+        //     }
+        //
+        //     localForecast = {
+        //         location: {
+        //             "Geonames-ID": reqBody.weatherdata.location.location.$.geobaseid,
+        //             name: reqBody.weatherdata.location.name,
+        //             type: reqBody.weatherdata.location.type,
+        //             country: reqBody.weatherdata.location.country,
+        //             timezoneUtcoffsetMinutes: reqBody.weatherdata.location.timezone.$.utcoffsetMinutes
+        //         },
+        //         credit: {
+        //             link_text: reqBody.weatherdata.credit.link.$.text,
+        //             link_url: reqBody.weatherdata.credit.link.$.url
+        //         },
+        //         meta: {
+        //             lastupdate: reqBody.weatherdata.meta.lastupdate,
+        //             nextupdate: reqBody.weatherdata.meta.nextupdate
+        //         },
+        //         sun: {
+        //             rise: reqBody.weatherdata.sun.$.rise,
+        //             set: reqBody.weatherdata.sun.$.set
+        //         },
+        //         forecast:dailyForecast
+        //
+        //
+        //     };
+        //
+        //     return localForecast;
+        //
+        // };
 
         /* Post forecast from req body. */
         router.route ('/')

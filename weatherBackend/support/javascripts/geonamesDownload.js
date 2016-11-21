@@ -16,7 +16,7 @@ request({
         var x=5;
         connectDB.db(function (db) {
 
-            dboper.insertDocument(db, JSON.parse(body),"geonames",function (result) {
+            dboper.insertDocument(db, JSON.parse(body),"forecasts",function (result) {
                 console.log(result);
             });
 
