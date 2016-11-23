@@ -1,6 +1,7 @@
-        var dboper = require('../scripts/dbOperations');
+        var dboper = require('../support/javascripts/dbOperations');
         var assert = require('assert');
-        var connectDB = require('../javascripts/mongoConnect');
+        var connectDB = require('../support/javascripts/mongoConnect');
+        var forecastOper = require('../support/javascripts/forecastOperations')
 
         var express = require('express');
         var router = express.Router();
@@ -60,13 +61,57 @@
         // };
 
         /* Post forecast from req body. */
-        router.route ('/')
+        // router.route ('/:geobaseId/:timezone')
+
+
+
+        router.route ('/:geobaseId/:timezoneUtcoffsetMinutes/:isCurrentForecast')
+
             .get(function (req, res) {
-                console.log('Condole body to GET is ' + req.body);
-                res.writeHead(200, { 'Content-Type': 'text/plain' });
-                res.write ('This is second line of body of GET response. ');
-                res.end('In fact, it was GET request to forecastUpdate');
+                // console.log('Console body to GET is ');
+                console.log(req.params);
+                // forecastOper.checkForecastValidity(req.params.geobaseId, function (err, result) {
+                //     if (err) throw err;
+                //
+                //     if (result) {
+                //         res.send(req.params);
+                //
+                //     } else {
+                //         forecastOper.updateCityForecast(req.params.geobaseId, function (result) {
+                //
+                //
+                //         });
+                //     }
+                //
+                // });
+
+                // res.writeHead(200, { 'Content-Type': 'text/plain' });
+                // res.writeHead(200, { 'Content-Type': 'application/json' });
+                // res.write (JSON.toString(req.params.geobaseId));
+                // res.end (req.params);
+                // res.end('In fact, it was GET request to forecastUpdate');
                 // res.send(req.body);
+
+                // check if it is request for current forecast (isCurrentForecast=1) or week forecast (isCurrentForecast=0)
+                if ( +req.params.isCurrentForecast ) {
+                    console.log("Forecast for current time");
+                    forecastOper.getDaylyForecast(req.params.geobaseId, req.params.timezoneUtcoffsetMinutes, function (err, cityDaylyForecast) {
+                        // asser.equal(err, null);
+
+                        res.send(cityDaylyForecast);
+                    });
+                } else {
+                    console.log("Forecast for week");
+                    forecastOper.getCityFullForecast(req.params.geobaseId, function (err, cityFullForecast) {
+                        // asser.equal(err, null);
+
+                        res.send(cityFullForecast);
+                    });
+                }
+
+
+                // res.send(req.params);
+
             })
             .post(function (req, res) {
             console.log("console body to POST is ");

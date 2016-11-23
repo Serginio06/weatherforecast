@@ -9,8 +9,8 @@ exports.insertDocument = function (db, document, collection, callback) {
     // Insert some documents
     coll.insertOne (document, function (err, result) {
         assert.equal (err, null);
-        console.log("Inserted " + result.result.n + " documents into the document collection "
-            + collection);
+        // console.log("Inserted " + result.result.n + " documents into the document collection "
+        //     + collection);
         callback (result);
     });
 };
@@ -20,7 +20,9 @@ exports.insertDocuments = function (db, documentsArray, collection, indexes, cal
     var coll = db.collection (collection);
     // Insert some documents
 
-    if (indexes != "") {
+    // console.log("indexes= " + indexes);
+    
+    if (indexes != "" ) {
         coll.createIndex (indexes, {dropDups: true});
     }
 
@@ -146,13 +148,14 @@ exports.updateDocument = function (db, document, update, collection, callback) {
     // Get the documents collection
     var coll = db.collection (collection);
 
-    // Update document
+    // Update document { upsert: true }
     coll.updateOne (document
-        , {$set: update}, null, function (err, result) {
-
+        , {$set: update}, { upsert: true }, function (err, result) {
             assert.equal (err, null);
-            console.log ("Updated the document with " + update);
-            callback (result);
+
+            // console.log ("Updated the document with ");
+            // console.log(update);
+            callback (err, result);
         });
 };
 
