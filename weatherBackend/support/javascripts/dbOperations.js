@@ -57,6 +57,18 @@ exports.findDocumentsByQuerry = function (db, DBquerry, collection, callback) {
     });
 };
 
+exports.findDocumentsByQuerryWithLimit = function (db, DBquerry, collection, resultLimit, projection, sortOrder,  callback) {
+    // Get the documents collection
+    var coll = db.collection (collection);
+
+    // Find some documents
+    coll.find (DBquerry , projection).limit(resultLimit).sort(sortOrder).toArray (function (err, docs) {
+        assert.equal (err, null);
+
+        callback (docs);
+    });
+};
+
 exports.removeGeonamesDuplicates = function (db, key, collection, callback) {
     // Get the documents collection
     var coll = db.collection (collection);
@@ -86,14 +98,17 @@ exports.removeGeonamesDuplicates = function (db, key, collection, callback) {
     ]).toArray (function (err, docs) {
 
         console.log (docs.length + " geoname duplicates found in DB");
-        // console.log(docs);
+        console.log(docs);
         var n = 0;
 
 
         var deleteDuplicates = function (n) {
 
-            // console.log ("this is beginig of self running function. n= " + n);
+            console.log ("this is beginig of self running function. n= " + n);
+
+
             if (n < docs.length) {
+                console.log("Removing dupicated obj with _id=" + docs[n].dups);
                 // console.log (n + " times RECURSIVE functions were run");
                 docs[n].dups.shift();
                 coll.removeMany (
@@ -143,20 +158,23 @@ exports.removeDocument = function (db, document, collection, callback) {
     });
 };
 
-exports.updateDocument = function (db, document, update, collection, callback) {
+exports.updateDocument = function (db,  searchString, newDocToUpdate, collection, callback) {
 
     // Get the documents collection
     var coll = db.collection (collection);
 
     // Update document { upsert: true }
-    coll.updateOne (document
-        , {$set: update}, { upsert: true }, function (err, result) {
+    coll.updateOne (searchString
+        , {$set: newDocToUpdate}, { upsert: true }, function (err, result) {
             assert.equal (err, null);
 
-            // console.log ("Updated the document with ");
-            // console.log(update);
+            console.log ("New doc inserted: " + result.upsertedCount);
+            console.log ("Doc matched to updated: " + result.matchedCount);
+            console.log ("Doc updated: " + result.modifiedCount);
+
             callback (err, result);
         });
+
 };
 
 exports.dropCollection = function (db, collection, callback) {

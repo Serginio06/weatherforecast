@@ -62,6 +62,10 @@ var startModule = Date.now ();
 //
 // };
 
+var isNumber = function (n) {
+    return !isNaN (parseFloat (n)) && isFinite (n);
+};
+
 
 var parsYrTxtGeonameFiletoJSON = function (fileBuffer, callback) {
     var startParsing = Date.now ();
@@ -84,19 +88,27 @@ var parsYrTxtGeonameFiletoJSON = function (fileBuffer, callback) {
         parsedGeonameRow = rowsGeonameForecast[n].split ('\t');
         objString = objString + '{"';
         for (var m = 0; m < parsedGeonameRow.length; m++) {
-            objString = objString + keysForJson[m].trim () + '":"' + parsedGeonameRow[m].trim () + '","';
-            counter2++;
+
+
+            if (isNumber (parsedGeonameRow[m].trim ())) {
+                // console.log ("it is number:" + parsedGeonameRow[m].trim ());
+                objString = objString + keysForJson[m].trim () + '":' + parsedGeonameRow[m].trim () + ',"';
+                counter2++;
+            } else {
+                objString = objString + keysForJson[m].trim () + '":"' + parsedGeonameRow[m].trim () + '","';
+                counter2++;
+            }
         }
 
         objString = objString.slice (0, -2) + '},';
     }
 
-    
+
     objString = objString.slice (0, -1) + (
             ']}'
         );
     // objString = objString.slice(0, -1) + '£';
-    console.log(counter2 + " Elements of array was processed to create JSON obj");
+    console.log (counter2 + " Elements of array was processed to create JSON obj");
     console.log ("Creating StingObj (ms): " + (
             Date.now () - startCreateStringObj
         ));
